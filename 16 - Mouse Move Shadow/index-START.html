@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+    const hero = document.querySelector('.hero');
+    const text = hero.querySelector('h1');
+    const walk = 100; //100px;
+    function shadow(e){
+        const { offsetWidth : width , offsetHeight : height} = hero;
+        let { offsetX , offsetY} = e;//會改變用let
+        if(this !== e.target){//mousemove摸到的不是hero的時候要加上hero寬高
+            offsetX = offsetX + e.target.offsetLeft;
+            offsetY = offsetY + e.target.offsetTop;
+        }
+        console.log(Math.floor(offsetX / this.offsetWidth * walk) * 2 - walk)
+        let x = Math.floor(offsetX / this.offsetWidth * walk) * 2 - walk;
+        let y = Math.floor(offsetY / this.offsetHeight * walk)* 2 - walk;
+
+        text.style.textShadow =`
+        ${x * -1}px ${y * -1 }px 6px rgba(255, 255, 0, 0.5),
+        ${y}px ${x * -1}px 0 rgba(0,255,0,0.7),
+        ${y * -1}px ${x}px 0 rgba(0,0,255,0.7)
+        `;
+
+
+    }
+    
+    hero.addEventListener('mousemove', shadow)
+</script>
+</body>
+</html>
