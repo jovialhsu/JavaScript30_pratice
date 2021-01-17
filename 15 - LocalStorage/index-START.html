@@ -26,10 +26,50 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  const addItems = document.querySelector('.add-items');//form
+  const itemsList = document.querySelector('.plates');//ul
+  const items = JSON.parse(localStorage.getItem('items'))||[];//要存進去的資料
 
+  //寫入資料
+  function addPlate(e){
+    e.preventDefault();
+
+    const input = this.querySelector('[name=item]');
+    let obj ={name:input.value,done:false};
+    items.push(obj);
+    displayPlate(items,itemsList);
+    localStorage.setItem('items',JSON.stringify(obj));
+
+    //新增完顯示於畫面
+    
+    //新增完清空form表
+    this.reset();
+    }
+  //資料顯示於畫面
+  function displayPlate( datas = [] ,dom){
+    dom.innerHTML = datas.forEach(function(data,i){
+      return `
+      <li>
+          <input type="checkbox" data-index="${i}" id="item${i}" ${data.done ? 'checked' : ''} />
+          <label for="item${i}">${data.text}</label>
+        </li>
+      `
+    }).join("");
+  }
+  //點擊後改變資料及顯示狀態
+  function togglePlate(e){
+    if(!e.target.matches('input'))return;
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem('items',JSON.stringify(items))
+    displayPlate(items,itemsList);
+    }
+  
+
+  addItems.addEventListener('submit',addPlate);
+  itemsList.addEventListener('click',togglePlate);
+  displayPlate(items,itemsList);
 </script>
 
 
